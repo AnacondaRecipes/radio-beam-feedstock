@@ -1,40 +1,43 @@
-{% set name = "radio_beam" %}
+{% set name = "radio-beam" %}
 {% set version = "0.3.9" %}
 
 package:
-  name: radio-beam
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name|replace("-", "_") }}-{{ version }}.tar.gz
   sha256: 9b5fea7bcc9b26543213784633b32e81630c9c0855077b7abf4b46cf8d84e644
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
-  noarch: python
+  skip: true  # [py<310]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
-
   host:
-    - python {{ python_min }}
     - pip
+    - python
+    - setuptools >=30.3.0
     - setuptools_scm
-
+    - wheel
   run:
-    - python >={{ python_min }}
-    - astropy-base
-    - numpy >=1.9.0
+    - python
+    - astropy
+    - numpy >=1.8.0
     - scipy
-    - setuptools
-    - six
 
 test:
-  requires:
-    - python {{ python_min }}
   imports:
     - radio_beam
+  requires:
+    - pip
+    - pytest
+    - pytest-astropy >=0.10
+  commands:
+    - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest --pyargs radio_beam.tests
 
 about:
   home: https://github.com/radio-astro-tools/radio-beam
@@ -42,6 +45,10 @@ about:
   license_family: BSD
   license_file: LICENSE.rst
   summary: Tools for Beam I/O and Manipulation
+  description: |
+    Radio Beam is a simple toolkit for reading beam information from FITS headers and manipulating beams
+  doc-url: https://github.com/radio-astro-tools/radio-beam
+  dev-url: https://github.com/radio-astro-tools/radio-beam
 
 extra:
   recipe-maintainers:
