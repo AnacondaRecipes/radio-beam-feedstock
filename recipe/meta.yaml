@@ -20,7 +20,6 @@ requirements:
     - python
     - setuptools >=61.2
     - setuptools_scm
-    - setuptools-scm
   run:
     - python
     - astropy >=6.1
@@ -50,7 +49,7 @@ about:
   summary: Tools for Beam I/O and Manipulation
   description: |
     Radio Beam is a simple toolkit for reading beam information from FITS headers and manipulating beams
-  doc-url: https://github.com/radio-astro-tools/radio-beam
+  doc-url: https://radio-beam.readthedocs.io/en/latest
   dev-url: https://github.com/radio-astro-tools/radio-beam
 
 extra:
